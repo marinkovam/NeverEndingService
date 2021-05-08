@@ -76,8 +76,5 @@ public class ServiceBroadcastReceiver extends BroadcastReceiver {
                 }
             }
         }, 1000);
-
     }
-
-
 }
