@@ -28,7 +28,6 @@ public class ServiceBroadcastReceiver extends BroadcastReceiver {
         Log.d("BROADCAST_RECEIVER","the timer will start "+ context.toString());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             scheduleJob(context);
-
         }else{
             registerRestarterReceiver(context);
             HelperLaunchServiceClass.launchService(context);
