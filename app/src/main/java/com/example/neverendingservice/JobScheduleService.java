@@ -69,7 +69,6 @@ public class JobScheduleService extends JobService {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 unregisterReceiver(serviceBR);
             }
         }, 1000);

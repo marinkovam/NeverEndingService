@@ -23,7 +23,6 @@ public class ServiceNotification {
             Intent notificationIntent = new Intent(context, MainActivity.class);
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             notificationPendingIntent = PendingIntent.getActivity(context,0,notificationIntent,0);
-            // the pending intent is ready
         }
 
         Notification notification;

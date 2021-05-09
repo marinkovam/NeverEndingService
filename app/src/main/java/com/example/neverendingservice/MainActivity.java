@@ -11,7 +11,6 @@ import com.example.neverendingservice.ServiceBroadcastReceiver;
 public class MainActivity extends AppCompatActivity {
     Context mainContext;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
