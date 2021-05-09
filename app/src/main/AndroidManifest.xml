@@ -36,14 +36,12 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
                 <action android:name="com.example.neverendingservice.activity.recognition.active_service.RestartActiveService"/>
-
             </intent-filter>
         </receiver>
 
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
