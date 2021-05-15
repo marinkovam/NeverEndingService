@@ -13,8 +13,6 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.neverendingservice.HelperLaunchServiceClass;
-
 public class ServiceBroadcastReceiver extends BroadcastReceiver {
 
 
@@ -24,13 +22,16 @@ public class ServiceBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+
         Log.d("BROADCAST_RECEIVER","the timer will start "+ context.toString());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             scheduleJob(context);
+
         }else{
             registerRestarterReceiver(context);
             HelperLaunchServiceClass.launchService(context);
         }
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -73,5 +74,10 @@ public class ServiceBroadcastReceiver extends BroadcastReceiver {
                 }
             }
         }, 1000);
+
     }
+
+
 }
+
+

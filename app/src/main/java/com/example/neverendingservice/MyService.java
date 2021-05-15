@@ -1,21 +1,20 @@
 package com.example.neverendingservice;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.LayoutInflater;
 
 import androidx.annotation.Nullable;
-
-import com.example.neverendingservice.ServiceNotification;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MyService extends Service {
+
     protected static final int NOT_ID = 150;
     private static String TAG = "Service";
 
@@ -23,9 +22,14 @@ public class MyService extends Service {
     private int timeCounter ;
     private static Timer timer;
     private TimerTask timerTask;
+    public NetworkCheckClass networkCheck;
+    public Context context;
+    public int pingNumber = 0;
 
+    private final static int INTERVAL = 600*1000;
 
     public MyService() {
+
         super();
     }
 
@@ -43,6 +47,22 @@ public class MyService extends Service {
         super.onStartCommand(intent, flags, startId);
 
         // Log.d(TAG , "Restarting service  ");
+        networkCheck = new NetworkCheckClass(this);
+        boolean network = networkCheck.networkCheck();
+
+        if(network){
+            Log.i("MAKE_PING","START_COMAND: Connected to the internet");
+            Thread t = new Thread(){
+                public void run(){
+                    taskDelayLoop();
+                }
+            };
+            t.start();
+        }else{
+            Log.i("START_COMMAND","NOT connected to the internet");
+        }
+
+        Log.i("MAKE_PING","START_COMMAND: The onStartCommand() is called");
 
         SharedPreferences prefs= getSharedPreferences("com.example.neverendingservice.ActiveServiceRunning", MODE_PRIVATE);
 
@@ -60,6 +80,19 @@ public class MyService extends Service {
         startTimer();
 
         return START_STICKY;
+    }
+
+    public void taskDelayLoop(){
+        while(true){
+
+            new NetworkPING().execute();
+            Log.i("MAKE_PING","vnatre vo doInBackground");
+            try{
+                Thread.sleep(INTERVAL);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void startTimer() {
@@ -101,6 +134,7 @@ public class MyService extends Service {
         }
     }
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -114,7 +148,6 @@ public class MyService extends Service {
 
         } catch (NullPointerException e) {
             Log.e("SERVER", "Error " +e.getMessage());
-
         }
 
         Intent broadcastIntent = new Intent("com.example.neverendingservice");

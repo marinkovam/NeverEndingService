@@ -1,4 +1,5 @@
 package com.example.neverendingservice;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -10,9 +11,6 @@ import android.os.Build;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.neverendingservice.MainActivity;
-import com.example.neverendingservice.R;
-
 public class ServiceNotification {
 
     private PendingIntent notificationPendingIntent;
@@ -23,6 +21,7 @@ public class ServiceNotification {
             Intent notificationIntent = new Intent(context, MainActivity.class);
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             notificationPendingIntent = PendingIntent.getActivity(context,0,notificationIntent,0);
+            // the pending intent is ready
         }
 
         Notification notification;
@@ -42,7 +41,7 @@ public class ServiceNotification {
             }
             notification = notificationBuilder
                     .setSmallIcon(icon)
-                    .setColor(ContextCompat.getColor(context, R.color.purple_200))
+                    .setColor(ContextCompat.getColor(context, R.color.black))
                     .setContentTitle(title)
                     .setContentText(text)
                     .setContentIntent(notificationPendingIntent)

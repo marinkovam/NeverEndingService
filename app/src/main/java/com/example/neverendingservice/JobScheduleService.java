@@ -10,8 +10,6 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.neverendingservice.HelperLaunchServiceClass;
-
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class JobScheduleService extends JobService {
 
@@ -57,7 +55,6 @@ public class JobScheduleService extends JobService {
                 }
             }
         }, 1000);
-
     }
 
     @Override
