@@ -1,5 +1,7 @@
 package com.example.neverendingservice;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -11,6 +13,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class NetworkPING extends AsyncTask<Void,Void,String> {
 
     public static String ping;
@@ -20,9 +24,23 @@ public class NetworkPING extends AsyncTask<Void,Void,String> {
     public BufferedReader input;
     public int count;
     public  String line;
+    private static String TAG = "networkping";
+
+    public String resultOk;
+    public NetworkCheckClass networkCheck;
+    public Context mContext;
+    private SharedPreferences preferences;
+
+    public NetworkPING(Context context) {
+        mContext=context;
+    }
+
 
     @Override
     protected String doInBackground(Void... voids) {
+
+        networkCheck = new NetworkCheckClass(mContext.getApplicationContext());
+
 
         try {
             String jsonData = getJSON.getBackendJson();
@@ -35,7 +53,7 @@ public class NetworkPING extends AsyncTask<Void,Void,String> {
                 packetSize = jsonObject.getInt("packetSize");
                 jobPeriod = jsonObject.getInt("jobPeriod");
 
-                for(int j=0; j<=(int)(600/jobPeriod);j++){
+                for(int j=0; j<=600/jobPeriod;j++){
                     ping = makePING(host,count,packetSize);
 
                     Log.i("MAKE_PING",ping);
@@ -60,7 +78,9 @@ public class NetworkPING extends AsyncTask<Void,Void,String> {
 
     public String makePING(String Host , int Count, int PacketSize){
         String Ping = "";
+
         try{
+
             String pingCmd = "ping -s " + PacketSize + " -c "+ Count + " " + Host;
             Runtime runtime = Runtime.getRuntime();
             Process process = runtime.exec(pingCmd);
@@ -68,13 +88,40 @@ public class NetworkPING extends AsyncTask<Void,Void,String> {
             line = " ";
             while ((line = input.readLine()) != null){
                 Ping += line;
+
             }
             input.close();
+
+            Log.i("MAKE_PING",Ping);
+            preferences = mContext.getSharedPreferences("com.example.qoscheckapp.ActiveServiceRunning", MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            if(networkCheck.networkCheck()){
+                postJSON.postBackendJson(Ping);
+                if(preferences.getString("result1",null)!= null){
+                    postJSON.postBackendJson(preferences.getString("result1",null));
+                    editor.putString("result1",null);
+                }
+                if(preferences.getString("result2",null)!= null){
+                    postJSON.postBackendJson(preferences.getString("result2",null));
+                    editor.putString("result2",null);
+                }
+                else{
+                    if((preferences.getString("result1",null)!=null ) && (preferences.getString("result1",null)!=null)
+                            || (preferences.getString("result1",null)==null ) && (preferences.getString("result1",null)==null) ){
+                        editor.putString("result1",Ping);
+                    }else {
+                        editor.putString("result2",Ping);
+                    }
+                    editor.apply();
+                }
+
+
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return Ping;
     }
 }
-

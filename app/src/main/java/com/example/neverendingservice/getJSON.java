@@ -13,7 +13,8 @@ import java.net.URL;
 
 public class getJSON {
 
-    public static final String Url = "http://10.0.2.2:5000/getjobs";
+    public static final String Url = "http:// 92.53.53.127:5000/getjobs/hardware";
+    private static String TAG = "getjson";
 
     public static String getBackendJson(){
         String json = null;
@@ -62,9 +63,9 @@ public class getJSON {
                 }
             }
         }
+
         Log.d("GET_JSON","getBackendJson: "+json);
         return json;
+
     }
 }
-
-

@@ -19,6 +19,7 @@ public class ServiceBroadcastReceiver extends BroadcastReceiver {
     private static JobScheduler jobScheduler;
     private ServiceBroadcastReceiver serviceBR;
     public static final int JOB_ID = 1;
+    private static String TAG = "ServiceBroadcastReceiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {

@@ -1,3 +1,4 @@
+
 package com.example.neverendingservice;
 
 import android.app.Service;
@@ -15,7 +16,7 @@ import java.util.TimerTask;
 
 public class MyService extends Service {
 
-    protected static final int NOT_ID = 150;
+    protected static final int NOT_ID = 15;
     private static String TAG = "Service";
 
     private static Service currentService;
@@ -27,6 +28,8 @@ public class MyService extends Service {
     public int pingNumber = 0;
 
     private final static int INTERVAL = 600*1000;
+
+
 
     public MyService() {
 
@@ -85,14 +88,15 @@ public class MyService extends Service {
     public void taskDelayLoop(){
         while(true){
 
-            new NetworkPING().execute();
-            Log.i("MAKE_PING","vnatre vo doInBackground");
+            new NetworkPING(getApplicationContext()).execute();
+            Log.i("MAKE_PING","doInBackground() starts");
             try{
                 Thread.sleep(INTERVAL);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+
     }
 
     private void startTimer() {
@@ -141,13 +145,14 @@ public class MyService extends Service {
         //Log.d(TAG,"Service destroyed");
 
         try {
-            SharedPreferences prefs= getSharedPreferences("uk.ac.shef.oak.ServiceRunning", MODE_PRIVATE);
+            SharedPreferences prefs= getSharedPreferences("com.example.neverendingservice.ActiveServiceRunning", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putInt("timeCounter", timeCounter);
             editor.apply();
 
         } catch (NullPointerException e) {
             Log.e("SERVER", "Error " +e.getMessage());
+
         }
 
         Intent broadcastIntent = new Intent("com.example.neverendingservice");
